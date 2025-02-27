@@ -49,7 +49,7 @@
    </head>
    <body>
       <div>
-         <form action="" method="POST">
+         <form action="" method="GET">
             <table>
                <tr>
                   <td><h1>Item Name</h1></td>
@@ -95,14 +95,14 @@
       </div>
 
       <?php
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      if ($_SERVER["REQUEST_METHOD"] == "GET") {
           // Retrieve text inputs
-          $item_name = isset($_POST['itemname']) ? htmlspecialchars($_POST['itemname']) : 'N/A';
-          $price = isset($_POST['price']) ? htmlspecialchars($_POST['price']) : 'N/A';
+          $item_name = isset($_GET['itemname']) ? htmlspecialchars($_GET['itemname']) : 'N/A';
+          $price = isset($_GET['price']) ? htmlspecialchars($_GET['price']) : 'N/A';
           
           // Retrieve selected radio buttons
-          $card = isset($_POST['card']) ? htmlspecialchars($_POST['card']) : 'None selected';
-          $category = isset($_POST['category']) ? htmlspecialchars($_POST['category']) : 'None selected';
+          $card = isset($_GET['card']) ? htmlspecialchars($_GET['card']) : 'None selected';
+          $category = isset($_GET['category']) ? htmlspecialchars($_GET['category']) : 'None selected';
           
           // Append data to log.txt
           $log_entry = "$item_name,$price,$card,$category\n";
