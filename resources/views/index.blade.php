@@ -97,31 +97,32 @@
       <?php
       if ($_SERVER["REQUEST_METHOD"] == "GET") {
           // Retrieve text inputs
-          $item_name = isset($_GET['itemname']) ? htmlspecialchars($_GET['itemname']) : 'N/A';
-          $price = isset($_GET['price']) ? htmlspecialchars($_GET['price']) : 'N/A';
+          $item_name = isset($_GET['itemname']) ? htmlspecialchars($_GET['itemname']) : '';
+          $price = isset($_GET['price']) ? htmlspecialchars($_GET['price']) : '';
           
           // Retrieve selected radio buttons
-          $card = isset($_GET['card']) ? htmlspecialchars($_GET['card']) : 'None selected';
-          $category = isset($_GET['category']) ? htmlspecialchars($_GET['category']) : 'None selected';
+          $card = isset($_GET['card']) ? htmlspecialchars($_GET['card']) : '';
+          $category = isset($_GET['category']) ? htmlspecialchars($_GET['category']) : '';
           
-          // Append data to log.txt
-          $log_entry = "$item_name,$price,$card,$category\n";
-          file_put_contents(resource_path("views/log.txt"), $log_entry, FILE_APPEND);
-          
-          // Display item details
-          echo "<h1>Item Details</h1>";
-          echo "<p><strong>Item Name:</strong> $item_name</p>";
-          echo "<p><strong>Price:</strong> $price</p>";
-          echo "<p><strong>Card Used:</strong> $card</p>";
-          echo "<p><strong>Category:</strong> $category</p>";
+          // Append data to log.txt if all fields are filled
+          if ($item_name && $price && $card && $category) {
+              $log_entry = "$item_name,$price,$card,$category\n";
+              file_put_contents(resource_path("views/log.txt"), $log_entry, FILE_APPEND);
+          }
       }
+
+      // Clean log file contents
+      $log_contents = file(resource_path("views/log.txt"), FILE_IGNORE_NEW_LINES);
+      $valid_entries = array_filter($log_contents, function($line) {
+          return count(explode(",", $line)) === 4 && trim($line) !== 'N/A,N/A,None selected,None selected';
+      });
+      file_put_contents(resource_path("views/log.txt"), implode("\n", $valid_entries) . "\n");
 
       // Display log file contents
       echo "<h2>Log File Contents</h2>";
       echo "<table>";
       echo "<tr><th>Item Name</th><th>Price</th><th>Card Used</th><th>Category</th></tr>";
-      $log_contents = file(resource_path("views/log.txt"), FILE_IGNORE_NEW_LINES);
-      foreach ($log_contents as $line) {
+      foreach ($valid_entries as $line) {
           list($item_name, $price, $card, $category) = explode(",", $line);
           $row_class = ($card == 'moeed') ? 'style="background-color: lightblue;"' : (($card == 'wife') ? 'style="background-color: pink;"' : '');
           echo "<tr $row_class>";
