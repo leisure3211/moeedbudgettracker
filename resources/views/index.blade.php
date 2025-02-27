@@ -106,7 +106,7 @@
           
           // Append data to log.txt
           $log_entry = "$item_name,$price,$card,$category\n";
-          file_put_contents("log.txt", $log_entry, FILE_APPEND);
+          file_put_contents(resource_path("views/log.txt"), $log_entry, FILE_APPEND);
           
           // Display item details
           echo "<h1>Item Details</h1>";
@@ -120,7 +120,7 @@
       echo "<h2>Log File Contents</h2>";
       echo "<table>";
       echo "<tr><th>Item Name</th><th>Price</th><th>Card Used</th><th>Category</th></tr>";
-      $log_contents = file("log.txt", FILE_IGNORE_NEW_LINES);
+      $log_contents = file(resource_path("views/log.txt"), FILE_IGNORE_NEW_LINES);
       foreach ($log_contents as $line) {
           list($item_name, $price, $card, $category) = explode(",", $line);
           $row_class = ($card == 'moeed') ? 'style="background-color: lightblue;"' : (($card == 'wife') ? 'style="background-color: pink;"' : '');
