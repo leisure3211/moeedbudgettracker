@@ -2,3 +2,4 @@ mascara,12,wife,beauty
 plane ticket,900,moeed,travel
 grocery,122,wife,grocery
 pizza,35,moeed,food
+test,333,moeed,furniture
